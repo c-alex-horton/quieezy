@@ -12,19 +12,34 @@ const Quiz = () => {
   const { quizData, getData, gameState, initGameState } =
     useContext(QuizContext)
 
+  const [quizFetched, setQuizFetched] = useState(false)
+
   // Get Game Data from API
   useEffect(() => {
-    const setup = async () => {
+    if (!quizFetched) {
       getData()
+      setQuizFetched(true)
     }
-    setup()
-  }, [])
+    console.log('Use Effect 1 ran')
+  }, [quizFetched, getData, initGameState])
 
-  // Set Up game after Data has Been fetched
+  // initGame after data is fetched
   useEffect(() => {
-    initGameState()
-    setLoading(false)
-  }, [quizData])
+    if (quizData.questions[0].question !== '') {
+      initGameState()
+    }
+    if (gameState.started && loading) {
+      setLoading(false)
+    }
+    console.log('Use Effect 2 ran')
+  }, [quizData.questions, gameState.started, initGameState, loading])
+
+  const handleAnswer = (q: string) => {
+    if (
+      q === quizData.questions[gameState.currentQuestion - 1].correct_answer
+    ) {
+    }
+  }
 
   if (loading) {
     return (
@@ -41,15 +56,15 @@ const Quiz = () => {
       <main className='main'>
         <Logo />
         <Question
-          number={quizData.questions[0].q_number}
+          number={quizData.questions[gameState.currentQuestion - 1].q_number}
           question={quizData.questions[0].question}
         />
         {quizData.questions[0].answers.map((q) => {
-          return <Answer text={q} key={q} />
+          return <Answer text={q} key={q} onClick={() => handleAnswer(q)} />
         })}
         <ProgressBar
           progress={calcProgress(
-            gameState.currentQuestion,
+            gameState.currentQuestion - 1,
             gameState.totalQuestions
           )}
         />

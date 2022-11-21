@@ -1,5 +1,4 @@
-import { createContext, useState, FC, ReactNode } from 'react'
-import promisedSetState from '../utils/promisedSetState'
+import { createContext, useState, FC, ReactNode, useCallback } from 'react'
 
 type Questions = {
   q_number: number
@@ -8,11 +7,18 @@ type Questions = {
   correct_answer: string
 }
 
+type GameState = {
+  currentQuestion: number
+  totalQuestions: number
+  correctQuestions: number
+  started: boolean
+}
+
 interface IQuizContext {
   quizData: {
     questions: Questions[]
   }
-  gameState: any
+  gameState: GameState
   getData: () => void
   initGameState: () => void
 }
@@ -32,8 +38,9 @@ const defaultValue = {
     currentQuestion: 0,
     totalQuestions: 0,
     correctQuestions: 0,
+    started: false,
   },
-  getData: () => {
+  getData: async () => {
     return null
   },
   initGameState: () => {
@@ -58,19 +65,23 @@ export const QuizProvider: FC<Props> = ({ children }) => {
       },
     ],
   })
+
+  const [gameInited, setGameInited] = useState(false)
   const [gameState, setGameState] = useState({
-    currentQuestion: 1,
+    currentQuestion: 0,
     totalQuestions: 0,
     correctQuestions: 0,
+    started: false,
   })
 
-  const initGameState = () => {
+  const initGameState = useCallback(() => {
     setGameState({
       currentQuestion: 1,
       totalQuestions: quizData.questions.length,
       correctQuestions: 0,
+      started: true,
     })
-  }
+  }, [quizData.questions])
 
   const processQuestions = (
     questions: [
@@ -107,6 +118,7 @@ export const QuizProvider: FC<Props> = ({ children }) => {
     setQuizData({ ...quizData, questions: processQuestions(data.results) })
   }
 
+  // const initGame = async () => {}
   return (
     <QuizContext.Provider
       value={{
