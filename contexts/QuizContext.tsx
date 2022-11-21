@@ -1,3 +1,5 @@
+// TODO: Refactor to Zustand
+import { useRouter } from 'next/router'
 import { createContext, useState, FC, ReactNode, useCallback } from 'react'
 
 interface IQuizContext {
@@ -7,8 +9,11 @@ interface IQuizContext {
   gameState: GameState
   getData: () => void
   initGameState: () => void
+  setGameState: any
+  nextQuestion: (outcome: string) => void
 }
 
+// Included to stop typescript Error
 const defaultValue = {
   quizData: {
     questions: [
@@ -25,11 +30,18 @@ const defaultValue = {
     totalQuestions: 0,
     correctQuestions: 0,
     started: false,
+    currentQuestionAnswered: false,
   },
   getData: async () => {
     return null
   },
   initGameState: () => {
+    return null
+  },
+  setGameState: () => {
+    return null
+  },
+  nextQuestion: () => {
     return null
   },
 }
@@ -41,6 +53,8 @@ type Props = {
 }
 
 export const QuizProvider: FC<Props> = ({ children }) => {
+  const router = useRouter()
+
   const [quizData, setQuizData] = useState({
     questions: [
       {
@@ -58,6 +72,7 @@ export const QuizProvider: FC<Props> = ({ children }) => {
     totalQuestions: 0,
     correctQuestions: 0,
     started: false,
+    currentQuestionAnswered: false,
   })
 
   const initGameState = useCallback(() => {
@@ -66,6 +81,7 @@ export const QuizProvider: FC<Props> = ({ children }) => {
       totalQuestions: quizData.questions.length,
       correctQuestions: 0,
       started: true,
+      currentQuestionAnswered: false,
     })
   }, [quizData.questions])
 
@@ -104,6 +120,35 @@ export const QuizProvider: FC<Props> = ({ children }) => {
     setQuizData({ ...quizData, questions: processQuestions(data.results) })
   }
 
+  const nextQuestion = (outcome: string) => {
+    if (gameState.currentQuestion + 1 < gameState.totalQuestions) {
+      const updatedState = {
+        currentQuestion: (gameState.currentQuestion += 1),
+        totalQuestions: gameState.totalQuestions,
+        correctQuestions:
+          outcome === 'Correct!'
+            ? (gameState.correctQuestions += 1)
+            : gameState.correctQuestions,
+        started: true,
+        currentQuestionAnswered: false,
+      }
+      setGameState(updatedState)
+    } else {
+      const updatedState = {
+        currentQuestion: gameState.currentQuestion,
+        totalQuestions: gameState.totalQuestions,
+        correctQuestions:
+          outcome === 'Correct!'
+            ? (gameState.correctQuestions += 1)
+            : gameState.correctQuestions,
+        started: true,
+        currentQuestionAnswered: false,
+      }
+      setGameState(updatedState)
+      router.push('/results')
+    }
+  }
+
   // const initGame = async () => {}
   return (
     <QuizContext.Provider
@@ -111,7 +156,9 @@ export const QuizProvider: FC<Props> = ({ children }) => {
         quizData,
         getData,
         gameState,
+        setGameState,
         initGameState,
+        nextQuestion,
       }}>
       {children}
     </QuizContext.Provider>

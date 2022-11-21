@@ -7,3 +7,13 @@
     box-shadow: 2px 2px 10px rgba($color: #ffffff, $alpha: 0.5);
   }
 }
+
+.correct {
+  box-shadow: 2px 2px 10px rgba($color: #3bff42, $alpha: 0.5);
+  pointer-events: none;
+}
+
+.wrong {
+  box-shadow: 2px 2px 10px rgba($color: #e82828, $alpha: 0.5);
+  pointer-events: none;
+}

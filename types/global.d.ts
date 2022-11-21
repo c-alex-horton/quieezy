@@ -12,5 +12,6 @@ declare global {
         totalQuestions: number
         correctQuestions: number
         started: boolean
+        currentQuestionAnswered: boolean
       }
 }

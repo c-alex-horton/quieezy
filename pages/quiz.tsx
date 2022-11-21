@@ -1,5 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react'
 import Answer from '../components/Answer/Answer'
+import Button from '../components/Button/Button'
 import Layout from '../components/Layout/Layout'
 import Logo from '../components/Logo/Logo'
 import ProgressBar from '../components/ProgressBar/ProgressBar'
@@ -9,10 +10,17 @@ import calcProgress from '../utils/calcProgress'
 
 const Quiz = () => {
   const [loading, setLoading] = useState(true)
-  const { quizData, getData, gameState, initGameState } =
-    useContext(QuizContext)
+  const {
+    quizData,
+    getData,
+    gameState,
+    initGameState,
+    setGameState,
+    nextQuestion,
+  } = useContext(QuizContext)
 
   const [quizFetched, setQuizFetched] = useState(false)
+  const [feedback, setFeedback] = useState('')
 
   // Get Game Data from API
   useEffect(() => {
@@ -35,9 +43,25 @@ const Quiz = () => {
   }, [quizData.questions, gameState.started, initGameState, loading])
 
   const handleAnswer = (q: string) => {
+    setGameState({ ...gameState, currentQuestionAnswered: true })
     if (
       q === quizData.questions[gameState.currentQuestion - 1].correct_answer
     ) {
+      setFeedback('Correct!')
+    } else {
+      setFeedback('Wrong!')
+    }
+  }
+
+  const showCorrectness = (q: string) => {
+    if (gameState.currentQuestionAnswered) {
+      if (
+        q === quizData.questions[gameState.currentQuestion - 1].correct_answer
+      ) {
+        return 'correct'
+      } else {
+        return 'wrong'
+      }
     }
   }
 
@@ -57,11 +81,28 @@ const Quiz = () => {
         <Logo />
         <Question
           number={quizData.questions[gameState.currentQuestion - 1].q_number}
-          question={quizData.questions[0].question}
+          question={quizData.questions[gameState.currentQuestion - 1].question}
         />
-        {quizData.questions[0].answers.map((q) => {
-          return <Answer text={q} key={q} onClick={() => handleAnswer(q)} />
+        {quizData.questions[gameState.currentQuestion - 1].answers.map((q) => {
+          return (
+            <Answer
+              text={q}
+              key={q}
+              onClick={() => handleAnswer(q)}
+              mod={showCorrectness(q)}
+            />
+          )
         })}
+        <h1>{feedback}</h1>
+        {gameState.currentQuestionAnswered && (
+          <Button
+            content='Next'
+            func={() => {
+              nextQuestion(feedback)
+              setFeedback('')
+            }}
+          />
+        )}
         <ProgressBar
           progress={calcProgress(
             gameState.currentQuestion - 1,
