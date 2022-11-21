@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState, useCallback } from 'react'
+import React, { useEffect, useContext, useState } from 'react'
 import Answer from '../components/Answer/Answer'
 import Layout from '../components/Layout/Layout'
 import Logo from '../components/Logo/Logo'
