@@ -1,0 +1,99 @@
+// Colors
+$white: #fff;
+$black: #222;
+$lightBlock: 255, 255, 255;
+$darkBlock: 0, 0, 0;
+// Color Intentions
+$darkBackground: linear-gradient(
+  to right top,
+  #541e3c,
+  #522247,
+  #4d2751,
+  #452c5b,
+  #393264,
+  #35346b,
+  #303771,
+  #293a78,
+  #343a7e,
+  #403984,
+  #4d3788,
+  #5a348c
+);
+$lightBackground: linear-gradient(
+  to right top,
+  #ea8ec1,
+  #da8fcc,
+  #c692d5,
+  #b094dc,
+  #9897df,
+  #979ce1,
+  #97a1e3,
+  #97a6e5,
+  #adb0e9,
+  #c0baee,
+  #d1c5f2,
+  #e1d1f7
+);
+
+// Fonts
+@import url('https://fonts.googleapis.com/css2?family=Amaranth&display=swap');
+
+:root {
+  --white: #fff;
+  --black: #222;
+  --logoFont: 'Amaranth', sans-serif;
+}
+
+.light {
+  --mainColor: #{$black};
+  --background: #{$lightBackground};
+  --blockColor: #{$lightBlock};
+  --progress: #{$darkBackground};
+  background-image: var(--background);
+  color: var(--mainColor);
+}
+
+.dark {
+  --mainColor: #{$white};
+  --background: #{$darkBackground};
+  --blockColor: #{$darkBlock};
+  --progress: #{$lightBackground};
+  background-image: var(--background);
+  color: var(--mainColor);
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+h1 {
+  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Amaranth', sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  padding: 0 2rem;
+}
+
+.main {
+  min-height: 100vh;
+  // padding: 4rem 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  // justify-content: space-around;
+  align-items: center;
+}

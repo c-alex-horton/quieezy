@@ -1,0 +1,14 @@
+.button {
+  background-color: transparent;
+  border: 2px solid var(--mainColor);
+  border-radius: 35px;
+  padding: 10px 20px;
+  color: var(--mainColor);
+  &:hover {
+    cursor: pointer;
+    background-color: rgba($color: var(--blockColor), $alpha: 0.2);
+  }
+  &:active {
+    background-color: rgba(var(--blockColor), 0.1);
+  }
+}
