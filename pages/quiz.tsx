@@ -28,7 +28,7 @@ const Quiz = () => {
       getData()
       setQuizFetched(true)
     }
-    console.log('Use Effect 1 ran')
+    // console.log('Use Effect 1 ran')
   }, [quizFetched, getData, initGameState])
 
   // initGame after data is fetched
@@ -39,7 +39,7 @@ const Quiz = () => {
     if (gameState.started && loading) {
       setLoading(false)
     }
-    console.log('Use Effect 2 ran')
+    // console.log('Use Effect 2 ran')
   }, [quizData.questions, gameState.started, initGameState, loading])
 
   const handleAnswer = (q: string) => {
