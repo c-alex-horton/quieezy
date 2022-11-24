@@ -1,71 +1,63 @@
-import React, { useEffect, useContext, useState } from 'react'
+import React, { useEffect, useRef, useMemo } from 'react'
+import { useRouter } from 'next/router'
 import Answer from '../components/Answer/Answer'
 import Button from '../components/Button/Button'
 import Layout from '../components/Layout/Layout'
 import Logo from '../components/Logo/Logo'
 import ProgressBar from '../components/ProgressBar/ProgressBar'
 import Question from '../components/Question/Question'
-import { QuizContext } from '../contexts/QuizContext'
+import { useQuiz } from '../contexts/QuizContext'
 import calcProgress from '../utils/calcProgress'
+import { fetchQuizData } from '../utils/fetchQuizData'
 
 const Quiz = () => {
-  const [loading, setLoading] = useState(true)
-  const {
-    quizData,
-    getData,
-    gameState,
-    initGameState,
-    setGameState,
-    nextQuestion,
-  } = useContext(QuizContext)
+  const { state, dispatch } = useQuiz()
+  const dataFetchRef = useRef(false)
 
-  const [quizFetched, setQuizFetched] = useState(false)
-  const [feedback, setFeedback] = useState('')
+  const router = useRouter()
 
-  // Get Game Data from API
-  useEffect(() => {
-    if (!quizFetched) {
-      getData()
-      setQuizFetched(true)
-    }
-    // console.log('Use Effect 1 ran')
-  }, [quizFetched, getData, initGameState])
-
-  // initGame after data is fetched
-  useEffect(() => {
-    if (quizData.questions[0].question !== '') {
-      initGameState()
-    }
-    if (gameState.started && loading) {
-      setLoading(false)
-    }
-    // console.log('Use Effect 2 ran')
-  }, [quizData.questions, gameState.started, initGameState, loading])
+  const currentQuestion = useMemo(() => {
+    return state.questions[state.gameState.currentQuestion]
+  }, [state.questions, state.gameState])
 
   const handleAnswer = (q: string) => {
-    setGameState({ ...gameState, currentQuestionAnswered: true })
-    if (
-      q === quizData.questions[gameState.currentQuestion - 1].correct_answer
-    ) {
-      setFeedback('Correct!')
-    } else {
-      setFeedback('Wrong!')
-    }
-  }
-
-  const showCorrectness = (q: string) => {
-    if (gameState.currentQuestionAnswered) {
-      if (
-        q === quizData.questions[gameState.currentQuestion - 1].correct_answer
-      ) {
-        return 'correct'
+    if (!state.gameState.currentQuestionAnswered) {
+      if (q === currentQuestion.correct_answer) {
+        dispatch({ type: 'correct-answer' })
       } else {
-        return 'wrong'
+        dispatch({ type: 'incorrect-answer' })
       }
     }
   }
 
-  if (loading) {
+  const handleNextQuestion = () => {
+    if (!state.gameState.started) {
+      router.push('/results')
+    } else {
+      dispatch({ type: 'next-question' })
+    }
+  }
+
+  const handleCorrectness = (q: string) => {
+    if (state.gameState.currentQuestionAnswered) {
+      return q === currentQuestion.correct_answer
+    } else {
+      return null
+    }
+  }
+
+  // Get async Data & prevent double api call with ref
+  useEffect(() => {
+    const asyncFetch = async () => {
+      const data = await fetchQuizData()
+      dispatch({ type: 'add-data', payload: data })
+    }
+    if (dataFetchRef.current) return
+    dataFetchRef.current = true
+    asyncFetch()
+  }, [dispatch])
+
+  if (state.loading) {
     return (
       <Layout>
         <main className='main'>
@@ -80,33 +72,32 @@ const Quiz = () => {
       <main className='main'>
         <Logo />
         <Question
-          number={quizData.questions[gameState.currentQuestion - 1].q_number}
-          question={quizData.questions[gameState.currentQuestion - 1].question}
+          number={currentQuestion.q_number}
+          question={currentQuestion.question}
         />
-        {quizData.questions[gameState.currentQuestion - 1].answers.map((q) => {
+        {currentQuestion.answers.map((q) => {
           return (
             <Answer
               text={q}
               key={q}
               onClick={() => handleAnswer(q)}
-              mod={showCorrectness(q)}
+              mod={handleCorrectness(q)}
             />
           )
         })}
-        <h1>{feedback}</h1>
-        {gameState.currentQuestionAnswered && (
+        <h1>{state.gameState.feedback}</h1>
+        {state.gameState.currentQuestionAnswered && (
           <Button
             content='Next'
             func={() => {
-              nextQuestion(feedback)
-              setFeedback('')
+              handleNextQuestion()
             }}
           />
         )}
         <ProgressBar
           progress={calcProgress(
-            gameState.currentQuestion - 1,
-            gameState.totalQuestions
+            state.gameState.currentQuestion,
+            state.gameState.totalQuestions
           )}
         />
       </main>
