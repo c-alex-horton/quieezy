@@ -12,6 +12,8 @@ import { fetchQuizData } from '../utils/fetchQuizData'
 
 const Quiz = () => {
   const { state, dispatch } = useQuiz()
+
+  // Ref for fetchQuizData so api call only runs once
   const dataFetchRef = useRef(false)
 
   const router = useRouter()
@@ -19,32 +21,6 @@ const Quiz = () => {
   const currentQuestion = useMemo(() => {
     return state.questions[state.gameState.currentQuestion]
   }, [state.questions, state.gameState])
-
-  const handleAnswer = (q: string) => {
-    if (!state.gameState.currentQuestionAnswered) {
-      if (q === currentQuestion.correct_answer) {
-        dispatch({ type: 'correct-answer' })
-      } else {
-        dispatch({ type: 'incorrect-answer' })
-      }
-    }
-  }
-
-  const handleNextQuestion = () => {
-    if (!state.gameState.started) {
-      router.push('/results')
-    } else {
-      dispatch({ type: 'next-question' })
-    }
-  }
-
-  const handleCorrectness = (q: string) => {
-    if (state.gameState.currentQuestionAnswered) {
-      return q === currentQuestion.correct_answer
-    } else {
-      return null
-    }
-  }
 
   // Get async Data & prevent double api call with ref
   useEffect(() => {
@@ -56,6 +32,35 @@ const Quiz = () => {
     dataFetchRef.current = true
     asyncFetch()
   }, [dispatch])
+
+  // determine if answer was correct, dispatch corresponding action
+  const handleAnswer = (q: string) => {
+    if (!state.gameState.currentQuestionAnswered) {
+      if (q === currentQuestion.correct_answer) {
+        dispatch({ type: 'correct-answer' })
+      } else {
+        dispatch({ type: 'incorrect-answer' })
+      }
+    }
+  }
+
+  // call next action. If game is over, route to results page
+  const handleNextQuestion = () => {
+    if (!state.gameState.started) {
+      router.push('/results')
+    } else {
+      dispatch({ type: 'next-question' })
+    }
+  }
+
+  // determine if each answer option is correct or incorrect
+  const handleCorrectness = (q: string) => {
+    if (state.gameState.currentQuestionAnswered) {
+      return q === currentQuestion.correct_answer
+    } else {
+      return null
+    }
+  }
 
   if (state.loading) {
     return (

@@ -1,3 +1,4 @@
+// fetch data from quiz API, return json object of questions
 export const fetchQuizData = async () => {
   try {
     const res = await fetch(
@@ -9,7 +10,6 @@ export const fetchQuizData = async () => {
     )
     const data = await res.json()
 
-    console.log('Fetch raw data', data)
     return data.results
   } catch (error) {
     console.log(error)

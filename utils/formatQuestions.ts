@@ -1,6 +1,8 @@
 import { shuffle } from './shuffle'
 import { RawQuestion } from '../types/QuizContextTypes'
 
+// formate retrived questions to put in state
+// ! array must be maped, do not use ref
 export const formatQuestions = (rawQuestions: RawQuestion[]): Questions[] => {
   console.log('formatter entry', rawQuestions)
 
