@@ -25,8 +25,10 @@ const Quiz = () => {
   // Get async Data & prevent double api call with ref
   useEffect(() => {
     const asyncFetch = async () => {
-      const data = await fetchQuizData()
-      dispatch({ type: 'add-data', payload: data })
+      if (!state.gameState.started) {
+        const data = await fetchQuizData()
+        dispatch({ type: 'add-data', payload: data })
+      }
     }
     if (dataFetchRef.current) return
     dataFetchRef.current = true
