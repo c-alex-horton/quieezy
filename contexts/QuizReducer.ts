@@ -24,6 +24,7 @@ export const initialState: QuizState = {
 
 export const quizReducer = (state: QuizState, action: QuizAction) => {
   switch (action.type) {
+    // Add Fetch data and create formatted Questions
     case 'add-data': {
       const newQuestions = formatQuestions(action.payload)
       return {
@@ -37,14 +38,7 @@ export const quizReducer = (state: QuizState, action: QuizAction) => {
         questions: newQuestions,
       }
     }
-    case 'populate-questions': {
-      return {
-        gameState: state.gameState,
-        loading: false,
-        rawQuestions: state.rawQuestions,
-        questions: action.payload,
-      }
-    }
+    // update State for correct answer
     case 'correct-answer': {
       return {
         ...state,
@@ -53,6 +47,7 @@ export const quizReducer = (state: QuizState, action: QuizAction) => {
           currentQuestionAnswered: true,
           correctQuestions: state.gameState.correctQuestions + 1,
           feedback: 'Correct!',
+          // Check if its the last questions, if yes, set game as over
           started:
             state.gameState.currentQuestion + 1 >=
             state.gameState.totalQuestions
@@ -61,6 +56,7 @@ export const quizReducer = (state: QuizState, action: QuizAction) => {
         },
       }
     }
+    // update state for incorrect answer
     case 'incorrect-answer': {
       return {
         ...state,
@@ -68,6 +64,7 @@ export const quizReducer = (state: QuizState, action: QuizAction) => {
           ...state.gameState,
           currentQuestionAnswered: true,
           feedback: 'Wrong!',
+          // Check if its the last questions, if yes, set game as over
           started:
             state.gameState.currentQuestion + 1 >=
             state.gameState.totalQuestions
@@ -76,13 +73,8 @@ export const quizReducer = (state: QuizState, action: QuizAction) => {
         },
       }
     }
+    // reset question state, increment current question
     case 'next-question': {
-      if (
-        state.gameState.currentQuestion + 1 >=
-        state.gameState.totalQuestions
-      ) {
-        return { ...state, gameState: { ...state.gameState, started: false } }
-      }
       return {
         ...state,
         gameState: {
@@ -93,6 +85,7 @@ export const quizReducer = (state: QuizState, action: QuizAction) => {
         },
       }
     }
+    // reset quiz state
     case 'restart-quiz': {
       return { ...initialState }
     }
