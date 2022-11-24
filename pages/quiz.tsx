@@ -9,6 +9,7 @@ import Question from '../components/Question/Question'
 import { useQuiz } from '../contexts/QuizContext'
 import calcProgress from '../utils/calcProgress'
 import { fetchQuizData } from '../utils/fetchQuizData'
+import confetti from 'canvas-confetti'
 
 const Quiz = () => {
   const { state, dispatch } = useQuiz()
@@ -33,13 +34,14 @@ const Quiz = () => {
     if (dataFetchRef.current) return
     dataFetchRef.current = true
     asyncFetch()
-  }, [dispatch])
+  }, [dispatch, state.gameState.started])
 
   // determine if answer was correct, dispatch corresponding action
   const handleAnswer = (q: string) => {
     if (!state.gameState.currentQuestionAnswered) {
       if (q === currentQuestion.correct_answer) {
         dispatch({ type: 'correct-answer' })
+        confetti()
       } else {
         dispatch({ type: 'incorrect-answer' })
       }
