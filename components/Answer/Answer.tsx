@@ -6,16 +6,16 @@ import sanitizeHtml from 'sanitize-html'
 type Props = {
   text: string
   onClick?: () => void
-  mod?: string
+  mod?: boolean | null
 }
 
 const Answer = ({ text, onClick, mod }: Props) => {
   const modifier = () => {
-    if (mod === 'correct') {
+    if (mod) {
       return styles.correct
-    } else if (mod == 'wrong') {
+    } else if (mod === false) {
       return styles.wrong
-    } else {
+    } else if (mod === null) {
       return ''
     }
   }

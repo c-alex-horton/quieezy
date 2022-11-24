@@ -14,8 +14,8 @@ export const formatQuestions = (rawQuestions: RawQuestion[]): Questions[] => {
     return {
       q_number: i + 1,
       question: q.question,
-      answers: allAnswers,
-      correct_answer: '',
+      answers: shuffle(allAnswers),
+      correct_answer: q.correct_answer,
     }
   })
 }

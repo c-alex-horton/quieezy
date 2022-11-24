@@ -9,9 +9,13 @@ export type RawQuestion = {
   incorrect_answers: string[]
 }
 export type QuizAction =
-  | { type: 'next'; payload?: any }
   | { type: 'add-data'; payload?: any }
   | { type: 'populate-questions'; payload?: any }
+  | { type: 'correct-answer'; payload?: any }
+  | { type: 'incorrect-answer'; payload?: any }
+  | { type: 'next-question'; payload?: any }
+  | { type: 'restart-quiz'; payload?: any }
+
 export type QuizState = {
   questions: Questions[]
   gameState: GameState
