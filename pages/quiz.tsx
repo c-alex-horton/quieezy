@@ -1,71 +1,39 @@
-import React, { useEffect, useContext, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Answer from '../components/Answer/Answer'
 import Button from '../components/Button/Button'
 import Layout from '../components/Layout/Layout'
 import Logo from '../components/Logo/Logo'
 import ProgressBar from '../components/ProgressBar/ProgressBar'
 import Question from '../components/Question/Question'
-import { QuizContext } from '../contexts/QuizContext'
+import { useQuiz } from '../contexts/QuizContext'
 import calcProgress from '../utils/calcProgress'
+import { fetchQuizData } from '../utils/fetchQuizData'
+import { formatQuestions } from '../utils/formatQuestions'
 
 const Quiz = () => {
-  const [loading, setLoading] = useState(true)
-  const {
-    quizData,
-    getData,
-    gameState,
-    initGameState,
-    setGameState,
-    nextQuestion,
-  } = useContext(QuizContext)
+  const { state, dispatch } = useQuiz()
+  const dataFetchRef = useRef(false)
 
-  const [quizFetched, setQuizFetched] = useState(false)
-  const [feedback, setFeedback] = useState('')
+  const handleAnswer = (q: string) => {}
 
-  // Get Game Data from API
   useEffect(() => {
-    if (!quizFetched) {
-      getData()
-      setQuizFetched(true)
+    const asyncFetch = async () => {
+      const data = await fetchQuizData()
+      dispatch({ type: 'add-data', payload: data })
     }
-    // console.log('Use Effect 1 ran')
-  }, [quizFetched, getData, initGameState])
+    if (dataFetchRef.current) return
+    dataFetchRef.current = true
+    asyncFetch()
+  }, [])
 
-  // initGame after data is fetched
   useEffect(() => {
-    if (quizData.questions[0].question !== '') {
-      initGameState()
+    if (state.rawQuestions) {
+      const data = formatQuestions(state.rawQuestions)
+      dispatch({ type: 'populate-questions', payload: data })
     }
-    if (gameState.started && loading) {
-      setLoading(false)
-    }
-    // console.log('Use Effect 2 ran')
-  }, [quizData.questions, gameState.started, initGameState, loading])
+  }, [state.rawQuestions, dispatch])
 
-  const handleAnswer = (q: string) => {
-    setGameState({ ...gameState, currentQuestionAnswered: true })
-    if (
-      q === quizData.questions[gameState.currentQuestion - 1].correct_answer
-    ) {
-      setFeedback('Correct!')
-    } else {
-      setFeedback('Wrong!')
-    }
-  }
-
-  const showCorrectness = (q: string) => {
-    if (gameState.currentQuestionAnswered) {
-      if (
-        q === quizData.questions[gameState.currentQuestion - 1].correct_answer
-      ) {
-        return 'correct'
-      } else {
-        return 'wrong'
-      }
-    }
-  }
-
-  if (loading) {
+  if (state.loading) {
     return (
       <Layout>
         <main className='main'>
@@ -80,33 +48,27 @@ const Quiz = () => {
       <main className='main'>
         <Logo />
         <Question
-          number={quizData.questions[gameState.currentQuestion - 1].q_number}
-          question={quizData.questions[gameState.currentQuestion - 1].question}
+          number={state.questions[state.gameState.currentQuestion].q_number}
+          question={state.questions[state.gameState.currentQuestion].question}
         />
-        {quizData.questions[gameState.currentQuestion - 1].answers.map((q) => {
+        {state.questions[state.gameState.currentQuestion].answers.map((q) => {
           return (
             <Answer
               text={q}
               key={q}
               onClick={() => handleAnswer(q)}
-              mod={showCorrectness(q)}
+              // mod={}
             />
           )
         })}
-        <h1>{feedback}</h1>
-        {gameState.currentQuestionAnswered && (
-          <Button
-            content='Next'
-            func={() => {
-              nextQuestion(feedback)
-              setFeedback('')
-            }}
-          />
+        <h1>{state.gameState.feedback}</h1>
+        {state.gameState.currentQuestionAnswered && (
+          <Button content='Next' func={() => {}} />
         )}
         <ProgressBar
           progress={calcProgress(
-            gameState.currentQuestion - 1,
-            gameState.totalQuestions
+            state.gameState.currentQuestion,
+            state.gameState.totalQuestions
           )}
         />
       </main>
