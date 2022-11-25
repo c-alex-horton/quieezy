@@ -94,4 +94,8 @@ const mockData = [
   },
 ]
 
-test('formatQuestions', () => {})
+test('formatQuestions', () => {
+  const testOutput = formatQuestions(mockData)
+
+  expect(testOutput).toHaveLength(10)
+})
