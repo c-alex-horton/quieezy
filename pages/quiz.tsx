@@ -12,25 +12,27 @@ import { fetchQuizData } from '../utils/fetchQuizData'
 import confetti from 'canvas-confetti'
 
 const Quiz = () => {
+  const router = useRouter()
   const { state, dispatch } = useQuiz()
 
   // Ref for fetchQuizData so api call only runs once
   const dataFetchRef = useRef(false)
 
-  const router = useRouter()
-
+  // get array item of current question
   const currentQuestion = useMemo(() => {
     return state.questions[state.gameState.currentQuestion]
   }, [state.questions, state.gameState])
 
   // Get async Data & prevent double api call with ref
   useEffect(() => {
+    // asnyc wrapper function
     const asyncFetch = async () => {
       if (!state.gameState.started) {
         const data = await fetchQuizData()
         dispatch({ type: 'add-data', payload: data })
       }
     }
+    //Check if reference is current to prevent double api call
     if (dataFetchRef.current) return
     dataFetchRef.current = true
     asyncFetch()
@@ -94,6 +96,7 @@ const Quiz = () => {
             />
           )
         })}
+        {/* Added after the question is answered */}
         <h1>{state.gameState.feedback}</h1>
         {state.gameState.currentQuestionAnswered && (
           <Button
@@ -103,6 +106,7 @@ const Quiz = () => {
             }}
           />
         )}
+        {/* Shows progress bar of how far into quiz */}
         <ProgressBar
           progress={calcProgress(
             state.gameState.currentQuestion,
