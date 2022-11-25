@@ -19,6 +19,7 @@ export const initialState: QuizState = {
     feedback: '',
   },
   loading: true,
+  questionsFetched: false,
   rawQuestions: null,
 }
 
@@ -36,6 +37,7 @@ export const quizReducer = (state: QuizState, action: QuizAction) => {
         loading: false,
         rawQuestions: action.payload,
         questions: newQuestions,
+        questionsFetched: true,
       }
     }
     // update State for correct answer

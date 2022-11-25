@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useMemo } from 'react'
+import useSWR from 'swr'
 import { useRouter } from 'next/router'
 import Answer from '../components/Answer/Answer'
 import Button from '../components/Button/Button'
@@ -15,28 +16,19 @@ const Quiz = () => {
   const router = useRouter()
   const { state, dispatch } = useQuiz()
 
-  // Ref for fetchQuizData so api call only runs once
-  const dataFetchRef = useRef(false)
-
   // get array item of current question
   const currentQuestion = useMemo(() => {
     return state.questions[state.gameState.currentQuestion]
   }, [state.questions, state.gameState])
 
-  // Get async Data & prevent double api call with ref
-  useEffect(() => {
-    // asnyc wrapper function
-    const asyncFetch = async () => {
-      if (!state.gameState.started) {
-        const data = await fetchQuizData()
-        dispatch({ type: 'add-data', payload: data })
-      }
-    }
-    //Check if reference is current to prevent double api call
-    if (dataFetchRef.current) return
-    dataFetchRef.current = true
-    asyncFetch()
-  }, [dispatch, state.gameState.started])
+  const url = 'https://opentdb.com/api.php?amount=10&category=15&type=multiple'
+
+  useSWR(!state.questionsFetched ? url : null, fetchQuizData, {
+    onSuccess: (d) => {
+      console.log(d)
+      dispatch({ type: 'add-data', payload: d })
+    },
+  })
 
   // determine if answer was correct, dispatch corresponding action
   const handleAnswer = (q: string) => {

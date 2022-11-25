@@ -21,6 +21,7 @@ export type QuizState = {
   gameState: GameState
   loading: boolean
   rawQuestions: RawQuestion[] | null
+  questionsFetched: boolean
 }
 export type QuizDispatch = (action: QuizAction) => void
 export type QuizProviderProps = { children: React.ReactNode }
