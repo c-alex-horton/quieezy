@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import useSWR from 'swr'
 import { useRouter } from 'next/router'
 import Answer from '../components/Answer/Answer'
@@ -19,10 +19,11 @@ const Quiz = () => {
   // get array item of current question
   const currentQuestion = useMemo(() => {
     return state.questions[state.gameState.currentQuestion]
-  }, [state.questions, state.gameState])
+  }, [state.questions, state.gameState.currentQuestion])
 
   const url = 'https://opentdb.com/api.php?amount=10&category=15&type=multiple'
 
+  // Get questions from API if not already fetched for current quiz
   useSWR(!state.questionsFetched ? url : null, fetchQuizData, {
     onSuccess: (d) => {
       console.log(d)
