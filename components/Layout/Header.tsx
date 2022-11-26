@@ -11,7 +11,9 @@ const Header = () => {
   return (
     <div className={styles.header}>
       <div className={styles.menuwrap}>
-        <div className={styles.menu} onClick={() => setMenuToggle(!menuToggle)}>
+        <div
+          className={`${styles.menu} ${menuToggle ? styles.open : ''}`}
+          onClick={() => setMenuToggle(!menuToggle)}>
           <BsList />
           {menuToggle && <Menu />}
         </div>
