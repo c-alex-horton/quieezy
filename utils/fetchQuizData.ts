@@ -1,15 +1,12 @@
-export const fetchQuizData = async () => {
+// fetch data from quiz API, return json object of questions
+export const fetchQuizData = async (url: string) => {
   try {
-    const res = await fetch(
-      'https://opentdb.com/api.php?amount=10&category=15&type=multiple',
-      {
-        method: 'GET',
-        headers: {},
-      }
-    )
+    const res = await fetch(url, {
+      method: 'GET',
+      headers: {},
+    })
     const data = await res.json()
 
-    console.log('Fetch raw data', data)
     return data.results
   } catch (error) {
     console.log(error)

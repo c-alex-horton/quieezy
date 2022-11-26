@@ -1,0 +1,16 @@
+.menu {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 10px 0;
+  li {
+    list-style-type: none; /* Remove bullets */
+    padding: 5px 5px; /* Remove padding */
+    border-radius: 10px;
+    margin: 5px 0; /* Remove margins */
+    width: 100%;
+    &:hover {
+      cursor: pointer;
+      background-color: rgba(var(--blockColor), 0.5);
+    }
+  }
+}

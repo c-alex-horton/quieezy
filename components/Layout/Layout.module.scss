@@ -3,19 +3,3 @@
   transition: background-image 0.2s ease-in-out;
   position: relative;
 }
-
-.toggle {
-  position: absolute;
-  right: 5px;
-  top: 5px;
-  width: 75px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 10px;
-  background-color: rgba(var(--blockColor), 0.2);
-  border-radius: 25px;
-  &:hover {
-    cursor: pointer;
-  }
-}
