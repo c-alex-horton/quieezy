@@ -30,6 +30,7 @@ export const quizReducer = (state: QuizState, action: QuizAction) => {
     case 'add-data': {
       const newQuestions = formatQuestions(action.payload)
       return {
+        ...state,
         gameState: {
           ...state.gameState,
           totalQuestions: newQuestions.length,
