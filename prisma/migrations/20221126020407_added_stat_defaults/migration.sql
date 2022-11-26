@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "totalCorrect" SET DEFAULT 0,
+ALTER COLUMN "totalQuestions" SET DEFAULT 0,
+ALTER COLUMN "totalQuizes" SET DEFAULT 0;
