@@ -13,6 +13,7 @@ export const authOptions = {
     }),
     // ...add more providers here
   ],
+  secret: process.env.SECRET!,
   callbacks: {
     session({ session, user }: { session: Session; user: User }) {
       session.user.id = user.id
