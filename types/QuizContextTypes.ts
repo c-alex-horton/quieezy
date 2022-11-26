@@ -15,6 +15,7 @@ export type QuizAction =
   | { type: 'incorrect-answer'; payload?: any }
   | { type: 'next-question'; payload?: any }
   | { type: 'restart-quiz'; payload?: any }
+  | { type: 'score-synced'; payload?: any }
 
 export type QuizState = {
   questions: Questions[]
@@ -22,6 +23,7 @@ export type QuizState = {
   loading: boolean
   rawQuestions: RawQuestion[] | null
   questionsFetched: boolean
+  syncScore: boolean
 }
 export type QuizDispatch = (action: QuizAction) => void
 export type QuizProviderProps = { children: React.ReactNode }

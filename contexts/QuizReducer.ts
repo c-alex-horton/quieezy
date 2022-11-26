@@ -21,6 +21,7 @@ export const initialState: QuizState = {
   loading: true,
   questionsFetched: false,
   rawQuestions: null,
+  syncScore: false,
 }
 
 export const quizReducer = (state: QuizState, action: QuizAction) => {
@@ -90,6 +91,9 @@ export const quizReducer = (state: QuizState, action: QuizAction) => {
     // reset quiz state
     case 'restart-quiz': {
       return { ...initialState }
+    }
+    case 'score-synced': {
+      return { ...state, syncScore: true }
     }
     default: {
       return state

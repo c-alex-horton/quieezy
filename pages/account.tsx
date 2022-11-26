@@ -11,6 +11,7 @@ type Props = {
 
 const Account = ({ user }: Props) => {
   const session = getSession()
+
   if (!session) {
     ;<Layout>
       <main className='main'>
@@ -25,10 +26,7 @@ const Account = ({ user }: Props) => {
           <h1>Account</h1>
           <h2>{user.name}</h2>
           <h3>Quizes Taken: {user.totalQuizes}</h3>
-          <h3>
-            Accuracy:{' '}
-            {calcScore(user.totalCorrect + 1, user.totalQuestions + 1)}
-          </h3>
+          <h3>Accuracy: {calcScore(user.totalCorrect, user.totalQuestions)}</h3>
         </Block>
       </main>
     </Layout>
@@ -43,7 +41,7 @@ export async function getServerSideProps(context: any) {
     const prisma = new PrismaClient()
     const user = await prisma.user.findUnique({
       where: {
-        email: session?.user?.email!,
+        id: session?.user?.id,
       },
     })
 
