@@ -14,21 +14,17 @@ const Account = ({ user }: Props) => {
 
   if (!session) {
     ;<Layout>
-      <main className='main'>
-        <h1>You are not Logged In</h1>
-      </main>
+      <h1>You are not Logged In</h1>
     </Layout>
   }
   return (
     <Layout>
-      <main className='main'>
-        <Block>
-          <h1>Account</h1>
-          <h2>{user.name}</h2>
-          <h3>Quizes Taken: {user.totalQuizes}</h3>
-          <h3>Accuracy: {calcScore(user.totalCorrect, user.totalQuestions)}</h3>
-        </Block>
-      </main>
+      <Block>
+        <h1>Account</h1>
+        <h2>{user.name}</h2>
+        <h3>Quizes Taken: {user.totalQuizes}</h3>
+        <h3>Accuracy: {calcScore(user.totalCorrect, user.totalQuestions)}</h3>
+      </Block>
     </Layout>
   )
 }

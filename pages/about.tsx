@@ -9,15 +9,13 @@ const About = () => {
   const router = useRouter()
   return (
     <Layout>
-      <main className='main'>
-        <Logo />
-        <Block>
-          <h1>About</h1>
-          <p>This App was created by Caleb Horton.</p>
-          <p>React, NextJS, TypeScript, useReducer, useContext, SCSS</p>
-          <Button content='Back' func={() => router.back()}></Button>
-        </Block>
-      </main>
+      <Logo />
+      <Block>
+        <h1>About</h1>
+        <p>This App was created by Caleb Horton.</p>
+        <p>React, NextJS, TypeScript, useReducer, useContext, SCSS</p>
+        <Button content='Back' func={() => router.back()}></Button>
+      </Block>
     </Layout>
   )
 }

@@ -64,49 +64,45 @@ const Quiz = () => {
   if (state.loading) {
     return (
       <Layout>
-        <main className='main'>
-          <h1>Loading...</h1>
-        </main>
+        <h1>Loading...</h1>
       </Layout>
     )
   }
 
   return (
     <Layout>
-      <main className='main'>
-        <Logo />
-        <Question
-          number={currentQuestion.q_number}
-          question={currentQuestion.question}
-        />
-        {currentQuestion.answers.map((q) => {
-          return (
-            <Answer
-              text={q}
-              key={q}
-              onClick={() => handleAnswer(q)}
-              mod={handleCorrectness(q)}
-            />
-          )
-        })}
-        {/* Added after the question is answered */}
-        <h1>{state.gameState.feedback}</h1>
-        {state.gameState.currentQuestionAnswered && (
-          <Button
-            content='Next'
-            func={() => {
-              handleNextQuestion()
-            }}
+      <Logo />
+      <Question
+        number={currentQuestion.q_number}
+        question={currentQuestion.question}
+      />
+      {currentQuestion.answers.map((q) => {
+        return (
+          <Answer
+            text={q}
+            key={q}
+            onClick={() => handleAnswer(q)}
+            mod={handleCorrectness(q)}
           />
-        )}
-        {/* Shows progress bar of how far into quiz */}
-        <ProgressBar
-          progress={calcProgress(
-            state.gameState.currentQuestion,
-            state.gameState.totalQuestions
-          )}
+        )
+      })}
+      {/* Added after the question is answered */}
+      <h1>{state.gameState.feedback}</h1>
+      {state.gameState.currentQuestionAnswered && (
+        <Button
+          content='Next'
+          func={() => {
+            handleNextQuestion()
+          }}
         />
-      </main>
+      )}
+      {/* Shows progress bar of how far into quiz */}
+      <ProgressBar
+        progress={calcProgress(
+          state.gameState.currentQuestion,
+          state.gameState.totalQuestions
+        )}
+      />
     </Layout>
   )
 }

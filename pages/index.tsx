@@ -20,9 +20,7 @@ export default function Home() {
 
     return (
       <Layout>
-        <main className='main'>
-          <h1>Redirecting...</h1>
-        </main>
+        <h1>Redirecting...</h1>
       </Layout>
     )
   }
@@ -36,13 +34,11 @@ export default function Home() {
           <link rel='icon' href='/favicon.ico' />
         </Head>
 
-        <main className={'main'}>
-          <Logo />
-          <Button content='Sign In' func={() => signIn()} />
-          <Link href={'/quiz'}>
-            <Button content='Continue as Guest' />
-          </Link>
-        </main>
+        <Logo />
+        <Button content='Sign In' func={() => signIn()} />
+        <Link href={'/quiz'}>
+          <Button content='Continue as Guest' />
+        </Link>
       </div>
     </Layout>
   )

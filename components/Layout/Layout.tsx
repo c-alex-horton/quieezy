@@ -18,8 +18,7 @@ const Layout = ({ children }: Props) => {
         <div>|</div>
         <BsMoon />
       </div>
-
-      {children}
+      <main className='main'>{children}</main>
     </div>
   )
 }

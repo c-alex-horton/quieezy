@@ -40,28 +40,24 @@ const Results = () => {
   if (state.loading) {
     return (
       <Layout>
-        <main className='main'>
-          <h1>Loading...</h1>
-        </main>
+        <h1>Loading...</h1>
       </Layout>
     )
   }
   return (
     <Layout>
-      <main className='main'>
-        <Block>
-          <h1>You finished!</h1>
-          <h3>How&apos;d you do?</h3>
+      <Block>
+        <h1>You finished!</h1>
+        <h3>How&apos;d you do?</h3>
 
-          <h2>
-            {calcScore(
-              state.gameState.correctQuestions,
-              state.gameState.totalQuestions
-            )}
-          </h2>
-          <Button content='Go Again?' func={() => handleRestart()} />
-        </Block>
-      </main>
+        <h2>
+          {calcScore(
+            state.gameState.correctQuestions,
+            state.gameState.totalQuestions
+          )}
+        </h2>
+        <Button content='Go Again?' func={() => handleRestart()} />
+      </Block>
     </Layout>
   )
 }
