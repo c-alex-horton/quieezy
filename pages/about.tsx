@@ -9,7 +9,6 @@ const About = () => {
   const router = useRouter()
   return (
     <Layout>
-      <Logo />
       <Block>
         <h1>About</h1>
         <p>This App was created by Caleb Horton.</p>

@@ -13,9 +13,11 @@ const Account = ({ user }: Props) => {
   const session = getSession()
 
   if (!session) {
-    ;<Layout>
-      <h1>You are not Logged In</h1>
-    </Layout>
+    return (
+      <Layout>
+        <h1>You are not Logged In</h1>
+      </Layout>
+    )
   }
   return (
     <Layout>
@@ -33,6 +35,14 @@ export default Account
 
 export async function getServerSideProps(context: any) {
   const session = await getSession(context)
+  if (!session) {
+    return {
+      redirect: {
+        permenant: false,
+        destination: '/',
+      },
+    }
+  }
   if (session) {
     const prisma = new PrismaClient()
     const user = await prisma.user.findUnique({

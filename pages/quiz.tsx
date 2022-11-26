@@ -71,7 +71,6 @@ const Quiz = () => {
 
   return (
     <Layout>
-      <Logo />
       <Question
         number={currentQuestion.q_number}
         question={currentQuestion.question}

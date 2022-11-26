@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import { ThemeContext } from '../../contexts/ThemeContext'
-import Button from '../Button/Button'
-import { BsSun, BsMoon } from 'react-icons/bs'
+import Header from './Header'
 import styles from './Layout.module.scss'
 
 type Props = {
@@ -9,15 +8,11 @@ type Props = {
 }
 
 const Layout = ({ children }: Props) => {
-  const { theme, toggleTheme } = useContext(ThemeContext)
+  const { theme } = useContext(ThemeContext)
 
   return (
     <div className={`${theme} ${styles.layout}`}>
-      <div onClick={toggleTheme} className={styles.toggle}>
-        <BsSun />
-        <div>|</div>
-        <BsMoon />
-      </div>
+      <Header />
       <main className='main'>{children}</main>
     </div>
   )

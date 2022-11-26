@@ -3,7 +3,6 @@ import { useSession, signIn } from 'next-auth/react'
 import Button from '../components/Button/Button'
 import Link from 'next/link'
 import Layout from '../components/Layout/Layout'
-import Logo from '../components/Logo/Logo'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 
@@ -27,19 +26,16 @@ export default function Home() {
 
   return (
     <Layout>
-      <div className={'container'}>
-        <Head>
-          <title>Quieezy</title>
-          <meta name='description' content="It's Quiz Time!" />
-          <link rel='icon' href='/favicon.ico' />
-        </Head>
+      <Head>
+        <title>Quieezy</title>
+        <meta name='description' content="It's Quiz Time!" />
+        <link rel='icon' href='/favicon.ico' />
+      </Head>
 
-        <Logo />
-        <Button content='Sign In' func={() => signIn()} />
-        <Link href={'/quiz'}>
-          <Button content='Continue as Guest' />
-        </Link>
-      </div>
+      <Button content='Sign In' func={() => signIn()} />
+      <Link href={'/quiz'}>
+        <Button content='Continue as Guest' />
+      </Link>
     </Layout>
   )
 }
