@@ -12,8 +12,10 @@ const Layout = ({ children }: Props) => {
 
   return (
     <div className={`${theme} ${styles.layout}`}>
-      <Header />
-      <main className='main'>{children}</main>
+      <div className={styles.main}>
+        <Header />
+        {children}
+      </div>
     </div>
   )
 }
