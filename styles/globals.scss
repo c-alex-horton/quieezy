@@ -63,6 +63,10 @@ $lightBackground: linear-gradient(
   color: var(--mainColor);
 }
 
+html {
+  height: -webkit-fill-available;
+}
+
 html,
 body {
   padding: 0;
@@ -70,6 +74,8 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   min-height: 100vh;
+  color-scheme: dark;
+  background: black;
 }
 
 h1 {
