@@ -1,3 +1,9 @@
-.quiz {
-  height: 100%;
+.feedback {
+  height: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  margin: 10px 0 25px;
 }

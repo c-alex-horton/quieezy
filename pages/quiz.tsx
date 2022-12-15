@@ -4,13 +4,13 @@ import { useRouter } from 'next/router'
 import Answer from '../components/Answer/Answer'
 import Button from '../components/Button/Button'
 import Layout from '../components/Layout/Layout'
-import Logo from '../components/Logo/Logo'
 import ProgressBar from '../components/ProgressBar/ProgressBar'
 import Question from '../components/Question/Question'
 import { useQuiz } from '../contexts/QuizContext'
 import calcProgress from '../utils/calcProgress'
 import { fetchQuizData } from '../utils/fetchQuizData'
 import confetti from 'canvas-confetti'
+import styles from '../styles/Quiz.module.scss'
 
 const Quiz = () => {
   const router = useRouter()
@@ -86,15 +86,17 @@ const Quiz = () => {
         )
       })}
       {/* Added after the question is answered */}
-      <h1>{state.gameState.feedback}</h1>
-      {state.gameState.currentQuestionAnswered && (
-        <Button
-          content='Next'
-          func={() => {
-            handleNextQuestion()
-          }}
-        />
-      )}
+      <div className={styles.feedback}>
+        <h1>{state.gameState.feedback}</h1>
+        {state.gameState.currentQuestionAnswered && (
+          <Button
+            content='Next'
+            func={() => {
+              handleNextQuestion()
+            }}
+          />
+        )}
+      </div>
       {/* Shows progress bar of how far into quiz */}
       <ProgressBar
         progress={calcProgress(
